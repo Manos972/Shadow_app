@@ -1,82 +1,89 @@
-# Shadow Budget & Portfolio Manager
+# Shadow Finance — Budget & Portefeuille Boursier
 
-Application Laravel 11 de gestion de budget personnel et de portefeuille boursier.
+Application Laravel 12 complète de gestion de budget personnel et de portefeuille boursier canadien.
+
+> **Note Laravel 13** : Si Laravel 13 est disponible sur votre machine, changez `"^12.0"` par `"^13.0"` dans `composer.json` — l'app est compatible.
 
 ## Stack technique
-- **Backend**: Laravel 11, PHP 8.2+
-- **Frontend**: Livewire 3, Alpine.js, Tailwind CSS
-- **Base de données**: SQLite (par défaut) ou MySQL
-- **API**: Yahoo Finance (données boursières temps réel)
+- **Backend** : Laravel 12, PHP 8.3+
+- **Frontend** : Livewire 3, Alpine.js, Tailwind CSS 3
+- **Base de données** : SQLite (défaut) ou MySQL/PostgreSQL
+- **API boursière** : Yahoo Finance (gratuit, sans clé API)
+- **Multi-tenant** : Espaces partagés famille/partenaire
 
 ## Fonctionnalités
 
-### Budget
-- Gestion de plusieurs comptes (courant, épargne, espèces, crédit)
-- Transactions avec catégories personnalisables
-- Budgets mensuels par catégorie
-- Transactions récurrentes automatiques
+### 💰 Budget
+- Comptes CÉLI, REER, FHSA, chèques, épargne, espèces
+- Transactions avec catégorisation automatique (marchands canadiens)
+- Budgets mensuels par catégorie avec alertes dépassement
+- Transactions récurrentes (loyer, abonnements, salaire)
 - Rapports mensuels/annuels avec graphiques
+- **Import CSV/OFX** : RBC, TD, BMO, Scotiabank, Desjardins, Questrade, Wealthsimple
 
-### Portefeuille boursier
-- Gestion de plusieurs portefeuilles
-- Suivi des positions (achat/vente)
-- Prix en temps quasi-réel via Yahoo Finance
-- Calcul P&L (plus/moins-values réalisées et latentes)
-- Indicateurs techniques : RSI, SMA 20/50/200, MACD
-- Alertes de prix (email)
-- Liste de surveillance (watchlist)
-- Performance vs S&P 500
+### 📈 Portefeuille boursier
+- Actions TSX (.TO), NASDAQ, NYSE
+- Prix quasi-temps réel via Yahoo Finance
+- P&L latent et réalisé
+- Indicateurs techniques : RSI(14), SMA 20/50/200, MACD
+- Alertes prix (par email)
+- Watchlist avec prix objectifs et upside %
+- Analyse de l'allocation
 
-## Installation
+### 👥 Multi-tenant
+- Créez votre espace financier personnel
+- Invitez votre partenaire/famille (max 5 personnes)
+- Rôles : Propriétaire, Admin, Membre, Lecteur
+
+## Installation rapide
 
 ```bash
 git clone https://github.com/manos972/shadow_app.git
 cd shadow_app
 git checkout claude/laravel-budget-portfolio-app-7XkHK
 
-# Installer les dépendances PHP
 composer install
-
-# Installer les dépendances Node
 npm install
 
-# Configuration
 cp .env.example .env
 php artisan key:generate
 
-# Base de données SQLite (créée automatiquement)
 touch database/database.sqlite
 php artisan migrate --seed
 
-# Compiler les assets
 npm run build
-
-# Lancer le serveur
 php artisan serve
 ```
 
-## Accès
+**URL** : http://localhost:8000  
+**Compte démo** : `demo@shadow.app` / `password`
 
-- URL: http://localhost:8000
-- Compte démo créé par le seeder : **demo@shadow.app** / **password**
+## Scheduler (transactions récurrentes + cours boursiers)
+
+```bash
+# Développement
+php artisan schedule:work
+
+# Production (crontab)
+* * * * * cd /path-to-app && php artisan schedule:run >> /dev/null 2>&1
+```
 
 ## Commandes Artisan
 
 ```bash
-# Récupérer les cours boursiers
-php artisan market:fetch
-
-# Vérifier les alertes de prix
-php artisan alerts:process
-
-# Traiter les transactions récurrentes
-php artisan recurring:process
-
-# Lancer le scheduler (production)
-php artisan schedule:work
+php artisan market:fetch          # Récupère les cours boursiers
+php artisan alerts:process        # Vérifie les alertes de prix
+php artisan recurring:process     # Traite les transactions récurrentes
 ```
 
-## Configuration des données boursières
+## Mise à niveau Laravel 13
 
-Par défaut, l'app utilise Yahoo Finance (gratuit, aucune clé requise).
-Pour des données étendues, configurez `ALPHA_VANTAGE_API_KEY` dans `.env`.
+Si Laravel 13 est sorti et stable :
+```bash
+# Dans composer.json, modifier :
+"laravel/framework": "^13.0"
+
+# Puis :
+composer update laravel/framework
+php artisan migrate  # Si nouvelles migrations L13
+```
