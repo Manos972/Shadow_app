@@ -11,6 +11,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\StockDataService::class);
         $this->app->singleton(\App\Services\BudgetAnalysisService::class);
         $this->app->singleton(\App\Services\PortfolioAnalysisService::class);
+        $this->app->singleton(\App\Services\PortfolioOptimizationService::class);
+        $this->app->singleton(\App\Services\ImportService::class);
+        $this->app->singleton(\App\Services\AlertService::class);
     }
 
     public function boot(): void
