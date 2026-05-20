@@ -52,7 +52,7 @@ Route::middleware(['auth', \App\Http\Middleware\SetCurrentTeam::class])->group(f
     });
 
     // Import
-    Route::get('/import', fn() => view('import.index'))->name('import');
+    Route::get('/import', fn() => view('import.index'))->name('import.index');
 
     // Team
     Route::get('/team/settings', fn() => view('team.settings'))->name('team.settings');
